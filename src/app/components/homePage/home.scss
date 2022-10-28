@@ -1,0 +1,64 @@
+@import "../../_variables.scss";
+
+#home-page {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  #top-side {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-image: url("./home-BG.svg");
+    background-color: $first-color;
+
+    #home-headers {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      & > h1 {
+        font-family: $main-heading-font;
+        color: $first-color;
+        font-size: 2.5rem;
+      }
+
+      & > h2 {
+        font-family: $secondary-heading-font;
+        font-size: 1.5rem;
+        //gardien text color
+        background-color: $third-color;
+        background-image: linear-gradient(45deg, $fifth-color, $fourth-color);
+        background-size: 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -moz-text-fill-color: transparent;
+      }
+    }
+
+  }
+
+  #bottom-side {
+    height: 50%;
+    background-color: $third-color;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50% 0 50% 0;
+
+    #home-btns {
+      height: fit-content;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+
+      & > * {
+        @include btnStyle($fifth-color)
+      }
+    }
+  }
+}

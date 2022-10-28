@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Guntur:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Martel+Sans&display=swap');
+
+//colors
+$first-color : #101728;
+$second-color : #1f41bb;
+$third-color : #ffffff;
+$fourth-color : #ff3c5f;
+$fifth-color : #9340ff;
+$shadow-color : #ababab;
+
+//fonts
+$main-heading-font : 'Hind Guntur', sans-serif;
+$secondary-heading-font : 'Fira Sans', sans-serif;
+$regular-text-font : 'Martel Sans', sans-serif;
+
+
+
+//mixins
+@mixin btnStyle($bg_color_p){
+  background-color: $bg_color_p;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: $regular-text-font;
+  color: $third-color;
+
+  &:active {
+    box-shadow: inset 0px 0px 20px 10px $second-color;
+  }
+}
