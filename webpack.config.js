@@ -30,7 +30,7 @@ const baseConfig = {
         new HttpWebpackPlugin({
             template: path.resolve(__dirname, "public", "index.html"),
             filename: "index.html",
-            title: "My Music"
+            title: "Music Bay"
         })
     ],
     module: {
