@@ -102,8 +102,9 @@
       justify-content: space-evenly;
       align-items: flex-start;
       font-family: $regular-text-font;
-      & > * {
+      & > a > button {
         @include btnStyle($fifth-color);
+        cursor: pointer;
       }
     }
   }
