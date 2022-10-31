@@ -1,6 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Hind+Guntur:wght@700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:ital@1&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Martel+Sans&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap');
 
 //colors
 $first-color: #101728;
@@ -11,9 +11,9 @@ $fifth-color: #9340ff;
 $shadow-color: #ababab;
 
 //fonts
-$main-heading-font: "Hind Guntur", sans-serif;
-$secondary-heading-font: "Fira Sans", sans-serif;
-$regular-text-font: "Martel Sans", sans-serif;
+$main-heading-font: 'Roboto Mono', monospace;;
+$secondary-heading-font: 'Pacifico', cursive;
+$regular-text-font: 'Noto Serif', serif;
 
 //mixins
 @mixin btnStyle($bg_color_p) {
@@ -21,7 +21,8 @@ $regular-text-font: "Martel Sans", sans-serif;
   border: none;
   border-radius: 10px;
   padding: 10px;
-  font-family: $regular-text-font;
+  font-family: $secondary-heading-font;
+  font-weight:bold ;
   color: $third-color;
 
   &:active {
