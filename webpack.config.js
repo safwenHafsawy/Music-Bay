@@ -47,6 +47,7 @@ const baseConfig = {
                 }
             ],
         }),
+        //new ESLinter()
     ],
     module: {
         rules: [
@@ -70,6 +71,9 @@ const baseConfig = {
             },
         ],
     },
+    resolve: {
+        extensions: ["",".js", ".jsx"]
+    }
 };
 
 /*

@@ -1,7 +1,7 @@
 import React from "react";
-import "./home.scss";
-import { HomeBG, HomeSeparator } from "../illustrations/logosAndBg.jsx";
 import { Link } from "react-router-dom";
+import "./home.scss";
+import { HomeBG, HomeSeparator } from "../illustrations/logosAndBg";
 
 export default function HomePage() {
   return (
@@ -13,7 +13,7 @@ export default function HomePage() {
           <HomeBG />
         </div>
         <div id="get-started-action">
-          <button>
+          <button type="button">
             <a href="#get-started-options">Get Started</a>
           </button>
         </div>
@@ -26,17 +26,17 @@ export default function HomePage() {
           <h4>
             We offer you the opportunity to listen and enjoy your favorite music
             either by listening to a set of music we selected for you or by
-            connecting to your spotify and bringing you favorite songs to Music{" "}
+            connecting to your spotify and bringing you favorite songs to Music
             <span>Bay</span>
           </h4>
           <h1>So what are you choosing today ? </h1>
         </div>
         <div id="home-btns">
           <Link to="/categories">
-            <button>Start Listening now</button>
+            <button type="button">Start Listening now</button>
           </Link>
           <Link to="/categories">
-            <button>Connect To Spotify</button>
+            <button type="button">Connect To Spotify</button>
           </Link>
         </div>
       </div>
