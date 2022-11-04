@@ -1,7 +1,7 @@
 export default class Buffers {
-  constructor(context, urls) {
+  constructor(context, musicInfo) {
     this.context = context;
-    this.urls = urls;
+    this.musicInfo = musicInfo;
     this.buffer = [];
   }
 
@@ -15,10 +15,14 @@ export default class Buffers {
 
   async loadAll() {
     const urls = [];
-    this.urls.forEach((element) => console.log(element));
-    for(let i in this.urls)
-      await this.loadSound(this.urls[i], i);
+    this.musicInfo.forEach((element) => {
+      urls.push(element.link);
+    });
 
+    for (let i = 0; i < urls.length; i += 1) {
+      /* eslint-disable no-await-in-loop */
+      await this.loadSound(urls[i], i);
+    }
     return this.buffer;
   }
 }

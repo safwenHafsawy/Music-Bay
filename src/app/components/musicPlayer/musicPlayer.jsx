@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./musicPlayer.scss";
 import Buffers from "./buffer.service";
 
-const MusicPublicUrl = "http://localhost:5050/public/music/";
-const MusicUrls = [
+const MusicPublicUrl = process.env.PUBLICURL;
+const MUSICINTEL = [
   { name: "Wondeful World", link: `${MusicPublicUrl}jazz1.mp3` },
   { name: "Sky is Crying", link: `${MusicPublicUrl}jazz2.mp3` },
 ];
@@ -17,6 +17,7 @@ class MusicPlayer extends Component {
       gainNode: null,
       source: null,
       isLoadingMusic: false,
+      playedSongIndex: 0,
     };
     this.playAudio = this.playAudio.bind(this);
     this.stopAudio = this.stopAudio.bind(this);
@@ -37,11 +38,9 @@ class MusicPlayer extends Component {
   }
 
   async init() {
-    const { source, gainNode } = this.state;
     this.setState({ isLoadingMusic: true });
-    source.connect(gainNode);
-    gainNode.connect(this.audioContext.destination);
-    const buffer = new Buffers(this.audioContext, Object.values(MusicUrls));
+
+    const buffer = new Buffers(this.audioContext, Object.values(MUSICINTEL));
     const buffers = await buffer.loadAll();
     this.setState(
       {
@@ -52,7 +51,9 @@ class MusicPlayer extends Component {
   }
 
   playAudio() {
-    const { isLoadingMusic, elapsed, source, bufferAudio } = this.state;
+    const {
+      isLoadingMusic, elapsed, source, bufferAudio, playedSongIndex, gainNode,
+    } = this.state;
     if (isLoadingMusic) {
       alert("Audio still loading");
       return;
@@ -62,15 +63,23 @@ class MusicPlayer extends Component {
         throw new Error(e);
       });
     } else {
-      source.buffer = bufferAudio[1];
+      console.log(bufferAudio);
+      source.buffer = bufferAudio[playedSongIndex];
+      console.log(source);
+      source.connect(gainNode);
+      gainNode.connect(this.audioContext.destination);
       source.start();
     }
   }
 
   stopAudio() {
-    this.state.source.stop();
+    const { source } = this.state;
+    source.stop();
     this.setState({
       source: this.audioContext.createBufferSource(),
+    }, () => {
+      this.audioContext.suspend();
+      console.log(this.audioContext);
     });
   }
 
@@ -85,7 +94,18 @@ class MusicPlayer extends Component {
     }
   }
 
-  toNextAudio() {}
+  toNextAudio() {
+    this.stopAudio();
+    this.setState((prevState) => ({
+      playedSongIndex: prevState.playedSongIndex + 1,
+      source: this.audioContext.createBufferSource(),
+    }), () => {
+      // eslint-disable-next-line react/destructuring-assignment
+      console.log(this.state.playedSongIndex);
+      this.init();
+      this.playAudio();
+    });
+  }
 
   render() {
     return (
@@ -94,6 +114,7 @@ class MusicPlayer extends Component {
           <button type="button" onClick={this.playAudio}>Play</button>
           <button type="button" onClick={this.pauseAudio}>Pause</button>
           <button type="button" onClick={this.stopAudio}>Stop</button>
+          <button type="button" onClick={this.toNextAudio}>Next</button>
         </div>
       </div>
     );

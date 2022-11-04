@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CSSMinimizer = require("css-minimizer-webpack-plugin");
 const Terser = require("terser-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const DotEnv = require("dotenv-webpack");
 
 const LAUNCH_COMMAND = process.env.npm_lifecycle_event; //getting which stage of the cycle is being executed
 const isDev = LAUNCH_COMMAND === "start" ? true : false; //check which webpack config to use
@@ -47,7 +48,8 @@ const baseConfig = {
                 }
             ],
         }),
-        //new ESLinter()
+        
+        new DotEnv()
     ],
     module: {
         rules: [
@@ -111,6 +113,9 @@ const prodConfig = {
 const devConfigs = {
     mode: "development",
     devServer: {
+        client :{
+            logging: "error",
+        },
         port: 5050,
         hot: true,
         open: true,
