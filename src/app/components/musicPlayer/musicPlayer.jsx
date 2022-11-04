@@ -18,6 +18,7 @@ class MusicPlayer extends Component {
       source: null,
       isLoadingMusic: false,
       playedSongIndex: 0,
+      currentlyPlaying: false,
     };
     this.playAudio = this.playAudio.bind(this);
     this.stopAudio = this.stopAudio.bind(this);
@@ -39,7 +40,6 @@ class MusicPlayer extends Component {
 
   async init() {
     this.setState({ isLoadingMusic: true });
-
     const buffer = new Buffers(this.audioContext, Object.values(MUSICINTEL));
     const buffers = await buffer.loadAll();
     this.setState(
@@ -63,35 +63,34 @@ class MusicPlayer extends Component {
         throw new Error(e);
       });
     } else {
-      console.log(bufferAudio);
       source.buffer = bufferAudio[playedSongIndex];
-      console.log(source);
       source.connect(gainNode);
       gainNode.connect(this.audioContext.destination);
       source.start();
     }
-  }
-
-  stopAudio() {
-    const { source } = this.state;
-    source.stop();
-    this.setState({
-      source: this.audioContext.createBufferSource(),
-    }, () => {
-      this.audioContext.suspend();
-      console.log(this.audioContext);
-    });
+    this.setState({ currentlyPlaying: true });
   }
 
   pauseAudio() {
     const { source } = this.state;
-    if (this.audioContext.state === "running") {
-      this.setState({
-        elapsed:
+    this.setState({
+      elapsed:
           source.buffer.duration - this.audioContext.currentTime,
+      currentlyPlaying: false,
+    }, () => this.audioContext.suspend());
+  }
+
+  stopAudio() {
+    this.audioContext.suspend();
+    this.setState({
+      source: this.audioContext.createBufferSource(),
+      elapsed: 0,
+      currentlyPlaying: false,
+    }, () => {
+      this.audioContext.suspend().then(() => {
+        console.log(this.audioContext);
       });
-      this.audioContext.suspend();
-    }
+    });
   }
 
   toNextAudio() {
@@ -102,18 +101,18 @@ class MusicPlayer extends Component {
     }), () => {
       // eslint-disable-next-line react/destructuring-assignment
       console.log(this.state.playedSongIndex);
-      this.init();
       this.playAudio();
     });
   }
 
   render() {
+    const { currentlyPlaying } = this.state;
     return (
       <div id="musicplayer_full">
         <div id="controls">
-          <button type="button" onClick={this.playAudio}>Play</button>
-          <button type="button" onClick={this.pauseAudio}>Pause</button>
-          <button type="button" onClick={this.stopAudio}>Stop</button>
+          <button type="button" onClick={this.playAudio} disabled={currentlyPlaying}>Play</button>
+          <button type="button" onClick={this.pauseAudio} disabled={!currentlyPlaying}>Pause</button>
+          <button type="button" onClick={this.stopAudio} disabled={!currentlyPlaying}>Stop</button>
           <button type="button" onClick={this.toNextAudio}>Next</button>
         </div>
       </div>
