@@ -54,14 +54,7 @@ class MusicPlayer extends Component {
   }
 
   playAudio() {
-    const {
-      isLoadingMusic,
-      elapsed,
-      source,
-      bufferAudio,
-      playedSongIndex,
-      gainNode,
-    } = this.state;
+    const { isLoadingMusic, elapsed, source, bufferAudio, playedSongIndex, gainNode } = this.state;
     if (isLoadingMusic) {
       // eslint-disable-next-line no-alert
       alert("Audio still loading");
@@ -145,12 +138,7 @@ class MusicPlayer extends Component {
           <ul>
             {MUSICINTEL.map((song, i) => (
               <li key={song.id}>
-                <button
-                  id={i}
-                  className="song"
-                  type="button"
-                  onClick={this.toNextAudio}
-                >
+                <button id={i} className="song" type="button" onClick={this.toNextAudio}>
                   {song.name}
                 </button>
               </li>
@@ -162,53 +150,28 @@ class MusicPlayer extends Component {
             <MusicSeparator />
           </div>
           <div>
-            <button
-              className="prevAudio"
-              type="button"
-              onClick={this.toNextAudio}
-              disabled={playedSongIndex === 0}
-            >
+            <h6>{MUSICINTEL[playedSongIndex].name}</h6>
+          </div>
+          <div>
+            <button className="prevAudio" type="button" onClick={this.toNextAudio} disabled={playedSongIndex === 0}>
               Prev
             </button>
-            <button
-              type="button"
-              onClick={this.playAudio}
-              disabled={currentlyPlaying}
-            >
+            <button type="button" onClick={this.playAudio} disabled={currentlyPlaying}>
               Play
             </button>
-            <button
-              type="button"
-              onClick={this.pauseAudio}
-              disabled={!currentlyPlaying}
-            >
+            <button type="button" onClick={this.pauseAudio} disabled={!currentlyPlaying}>
               Pause
             </button>
-            <button
-              type="button"
-              onClick={this.stopAudio}
-              disabled={!currentlyPlaying}
-            >
+            <button type="button" onClick={this.stopAudio} disabled={!currentlyPlaying}>
               Stop
             </button>
-            <button
-              type="button"
-              onClick={this.toNextAudio}
-              disabled={playedSongIndex === MUSICINTEL.length - 1}
-            >
+            <button type="button" onClick={this.toNextAudio} disabled={playedSongIndex === MUSICINTEL.length - 1}>
               Next
             </button>
           </div>
           <div>
             <label htmlFor="volume">Volume</label>
-            <input
-              id="volume"
-              type="range"
-              onChange={this.changeVolume}
-              value={volume}
-              min={0}
-              max={100}
-            />
+            <input id="volume" type="range" onChange={this.changeVolume} value={volume} min={0} max={100} />
           </div>
         </div>
       </div>

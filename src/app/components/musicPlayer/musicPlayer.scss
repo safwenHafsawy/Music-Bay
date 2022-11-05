@@ -50,11 +50,19 @@
     background-color: $third-color;
     position: relative;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 12px;
 
     #separator {
       @include music-separtor($first-color);
+    }
+
+    & > div > h6 {
+      &::before {
+        content: "Currently Playing : ";
+      }
     }
   }
 }
