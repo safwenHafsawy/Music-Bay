@@ -19,6 +19,7 @@
     "rules": {
         "quotes": "off",
         "no-console" : "warn",
-        "prefer-destructuring": "off"
+        "prefer-destructuring": "off",
+        "jsx-a11y/label-has-associated-control": "off"
     }
 }

@@ -4,8 +4,8 @@ import Buffers from "./buffer.service";
 
 const MusicPublicUrl = process.env.PUBLICURL;
 const MUSICINTEL = [
-  { name: "Wondeful World", link: `${MusicPublicUrl}jazz1.mp3` },
-  { name: "Sky is Crying", link: `${MusicPublicUrl}jazz2.mp3` },
+  { id: 1, name: "Wondeful World", link: `${MusicPublicUrl}jazz1.mp3` },
+  { id: 2, name: "Sky is Crying", link: `${MusicPublicUrl}jazz2.mp3` },
 ];
 
 class MusicPlayer extends Component {
@@ -19,11 +19,13 @@ class MusicPlayer extends Component {
       isLoadingMusic: false,
       playedSongIndex: 0,
       currentlyPlaying: false,
+      volume: 100,
     };
     this.playAudio = this.playAudio.bind(this);
     this.stopAudio = this.stopAudio.bind(this);
     this.toNextAudio = this.toNextAudio.bind(this);
     this.pauseAudio = this.pauseAudio.bind(this);
+    this.changeVolume = this.changeVolume.bind(this);
   }
 
   componentDidMount() {
@@ -55,6 +57,7 @@ class MusicPlayer extends Component {
       isLoadingMusic, elapsed, source, bufferAudio, playedSongIndex, gainNode,
     } = this.state;
     if (isLoadingMusic) {
+      // eslint-disable-next-line no-alert
       alert("Audio still loading");
       return;
     }
@@ -81,39 +84,70 @@ class MusicPlayer extends Component {
   }
 
   stopAudio() {
-    this.audioContext.suspend();
+    const { source } = this.state;
+    source.stop();
     this.setState({
       source: this.audioContext.createBufferSource(),
       elapsed: 0,
       currentlyPlaying: false,
-    }, () => {
-      this.audioContext.suspend().then(() => {
-        console.log(this.audioContext);
-      });
     });
   }
 
-  toNextAudio() {
-    this.stopAudio();
-    this.setState((prevState) => ({
-      playedSongIndex: prevState.playedSongIndex + 1,
-      source: this.audioContext.createBufferSource(),
-    }), () => {
-      // eslint-disable-next-line react/destructuring-assignment
-      console.log(this.state.playedSongIndex);
+  toNextAudio(e) {
+    const { currentlyPlaying } = this.state;
+    if (currentlyPlaying) this.stopAudio();
+    this.setState((prevState) => {
+      if (e.target.className === "song") {
+        return {
+          playedSongIndex: parseInt(e.target.id, 10),
+          source: this.audioContext.createBufferSource(),
+        };
+      }
+      if (e.target.className === "prevAudio") {
+        return {
+          playedSongIndex: prevState.playedSongIndex - 1,
+          source: this.audioContext.createBufferSource(),
+        };
+      }
+      return {
+        playedSongIndex: prevState.playedSongIndex + 1,
+        source: this.audioContext.createBufferSource(),
+      };
+    }, () => {
       this.playAudio();
     });
   }
 
+  changeVolume(e) {
+    const { gainNode, volume } = this.state;
+    this.setState({ volume: e.target.value }, () => {
+      gainNode.gain.value = volume / 100;
+    });
+  }
+
   render() {
-    const { currentlyPlaying } = this.state;
+    const { currentlyPlaying, volume, playedSongIndex } = this.state;
     return (
       <div id="musicplayer_full">
+        <div id="musicList">
+          {MUSICINTEL.map((song, i) => (
+            <li key={song.id}>
+              <button id={i} className="song" type="button" onClick={this.toNextAudio}>{song.name}</button>
+            </li>
+          ))}
+        </div>
         <div id="controls">
-          <button type="button" onClick={this.playAudio} disabled={currentlyPlaying}>Play</button>
-          <button type="button" onClick={this.pauseAudio} disabled={!currentlyPlaying}>Pause</button>
-          <button type="button" onClick={this.stopAudio} disabled={!currentlyPlaying}>Stop</button>
-          <button type="button" onClick={this.toNextAudio}>Next</button>
+          <div>
+            <button className="prevAudio" type="button" onClick={this.toNextAudio} disabled={playedSongIndex === 0}>Prev</button>
+            <button type="button" onClick={this.playAudio} disabled={currentlyPlaying}>Play</button>
+            <button type="button" onClick={this.pauseAudio} disabled={!currentlyPlaying}>Pause</button>
+            <button type="button" onClick={this.stopAudio} disabled={!currentlyPlaying}>Stop</button>
+            <button type="button" onClick={this.toNextAudio} disabled={playedSongIndex === MUSICINTEL.length - 1}>Next</button>
+          </div>
+          <div>
+            <label htmlFor="volume">Volume</label>
+            <input id="volume" type="range" onChange={this.changeVolume} value={volume} min={0} max={100} />
+          </div>
         </div>
       </div>
     );
