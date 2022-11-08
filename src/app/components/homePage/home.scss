@@ -36,12 +36,7 @@
       & > h3 {
         font-family: $secondary-heading-font;
         font-size: 2rem;
-        background: linear-gradient(
-          to right,
-          $fifth-color,
-          $first-color,
-          $fourth-color
-        );
+        background: linear-gradient(to right, $fifth-color, $first-color, $fourth-color);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -82,12 +77,7 @@
       width: 60%;
 
       & > h1 {
-        background: linear-gradient(
-          to right,
-          $fifth-color,
-          $fourth-color,
-          $third-color
-        );
+        background: linear-gradient(to right, $fifth-color, $third-color);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -103,7 +93,7 @@
       align-items: flex-start;
       font-family: $regular-text-font;
       & > a > button {
-        @include btnStyle($fifth-color);
+        @include btnStyle($fourth-color);
         cursor: pointer;
       }
     }

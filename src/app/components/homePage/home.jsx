@@ -24,9 +24,8 @@ export default function HomePage() {
       <div id="get-started-options">
         <div id="get-started-intro">
           <h4>
-            We offer you the opportunity to listen and enjoy your favorite music
-            either by listening to a set of music we selected for you or by
-            connecting to your spotify and bringing you favorite songs to Music
+            We offer you the opportunity to listen and enjoy your favorite music either by listening to a set of music
+            we selected for you or by connecting to your spotify and bringing you favorite songs to Music
             <span>Bay</span>
           </h4>
           <h1>So what are you choosing today ? </h1>

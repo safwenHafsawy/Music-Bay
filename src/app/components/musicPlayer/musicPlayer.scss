@@ -11,18 +11,20 @@
 
   #music_list {
     position: relative;
-    background-color: $first-color;
+    background-color: $third-color;
     width: 100%;
     height: 100%;
-
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
 
     & > h1 {
-      font: 2rem $main-heading-font;
-      color: $third-color;
+      font: 2rem $secondary-heading-font;
+      background: linear-gradient(45deg, $fourth-color, $fifth-color);
+      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
     }
 
     ul {
@@ -30,24 +32,22 @@
       li > .song {
         border: none;
         color: $second-color;
-        background: linear-gradient(45deg, $fourth-color, $fifth-color);
-        -webkit-text-fill-color: transparent;
-        -webkit-background-clip: text;
+        color: $first-color;
         background-clip: text;
-        text-decoration: underline;
-        font-family: $secondary-heading-font;
-        font-weight: bold;
-        font-size: 1.2rem;
+        font: bold 1rem $regular-text-font;
         cursor: pointer;
-        padding: 10px;
+      }
+      .owner_name {
+        font-size: 0.6rem;
       }
     }
   }
 
   #controls {
     width: 100%;
-    height: 35%;
-    background-color: $third-color;
+    height: 30%;
+    box-sizing: border-box;
+    background-color: $first-color;
     position: relative;
     display: flex;
     flex-direction: row;
@@ -56,7 +56,7 @@
     padding: 0px 12px;
 
     #separator {
-      @include music-separtor($first-color);
+      @include music-separtor($third-color);
     }
 
     & > div > h6 {

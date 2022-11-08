@@ -5,14 +5,15 @@ import { MusicSeparator } from "../illustrations/logosAndBg";
 
 const MusicPublicUrl = process.env.PUBLICURL;
 const MUSICINTEL = [
-  { id: 1, name: "Wondeful World", link: `${MusicPublicUrl}jazz1.mp3` },
-  { id: 2, name: "Sky is Crying", link: `${MusicPublicUrl}jazz2.mp3` },
+  { id: 1, name: "Wondeful World", owner: "Louis Armstrong", link: `${MusicPublicUrl}jazz1.mp3` },
+  { id: 2, name: "Sky is Crying", owner: "Gary B.B. Coleman", link: `${MusicPublicUrl}jazz2.mp3` },
 ];
 
 class MusicPlayer extends Component {
   constructor() {
     super();
     this.audioContext = new AudioContext();
+    this.keepTrack = undefined;
     this.state = {
       bufferAudio: [],
       gainNode: null,
@@ -21,12 +22,17 @@ class MusicPlayer extends Component {
       playedSongIndex: 0,
       currentlyPlaying: false,
       volume: 100,
+      elapsed: 0,
+      isShifting: false,
     };
     this.playAudio = this.playAudio.bind(this);
+    this.startingSource = this.startingSource.bind(this);
     this.stopAudio = this.stopAudio.bind(this);
     this.toNextAudio = this.toNextAudio.bind(this);
     this.pauseAudio = this.pauseAudio.bind(this);
     this.changeVolume = this.changeVolume.bind(this);
+    this.timeShift = this.timeShift.bind(this);
+    this.keepingTrackSongLength = this.keepingTrackSongLength.bind(this);
   }
 
   componentDidMount() {
@@ -37,7 +43,7 @@ class MusicPlayer extends Component {
       },
       () => {
         this.init();
-      }
+      },
     );
   }
 
@@ -49,48 +55,63 @@ class MusicPlayer extends Component {
       {
         bufferAudio: [...buffers],
       },
-      () => this.setState({ isLoadingMusic: false })
+      () => this.setState({ isLoadingMusic: false }),
     );
   }
 
+  startingSource() {
+    const { source, bufferAudio, playedSongIndex, gainNode, elapsed } = this.state;
+    source.buffer = bufferAudio[playedSongIndex];
+    source.connect(gainNode);
+    gainNode.connect(this.audioContext.destination);
+    source.start(0, elapsed);
+  }
+
   playAudio() {
-    const { isLoadingMusic, elapsed, source, bufferAudio, playedSongIndex, gainNode } = this.state;
+    const { isLoadingMusic, elapsed, isShifting } = this.state;
     if (isLoadingMusic) {
       // eslint-disable-next-line no-alert
       alert("Audio still loading");
       return;
     }
     if (elapsed > 0) {
+      if (isShifting) {
+        this.startingSource();
+        this.setState({ isShifting: false });
+      }
       this.audioContext.resume().catch((e) => {
         throw new Error(e);
       });
     } else {
-      source.buffer = bufferAudio[playedSongIndex];
-      source.connect(gainNode);
-      gainNode.connect(this.audioContext.destination);
-      source.start();
+      this.startingSource();
     }
+    this.keepingTrackSongLength(true);
     this.setState({ currentlyPlaying: true });
   }
 
   pauseAudio() {
-    const { source } = this.state;
     this.setState(
       {
-        elapsed: source.buffer.duration - this.audioContext.currentTime,
         currentlyPlaying: false,
       },
-      () => this.audioContext.suspend()
+      () => this.audioContext.suspend().then(this.keepingTrackSongLength),
     );
   }
 
-  stopAudio() {
+  stopAudio(elapsed_p = 0, isShifting_p = false) {
     const { source } = this.state;
-    source.stop();
-    this.setState({
-      source: this.audioContext.createBufferSource(),
-      elapsed: 0,
-      currentlyPlaying: false,
+    return new Promise((resolve) => {
+      source.stop();
+      this.keepingTrackSongLength();
+      this.setState(
+        {
+          source: this.audioContext.createBufferSource(),
+          elapsed: elapsed_p,
+          currentlyPlaying: false,
+          isShifting: isShifting_p,
+        },
+        resolve,
+      );
     });
   }
 
@@ -118,7 +139,7 @@ class MusicPlayer extends Component {
       },
       () => {
         this.playAudio();
-      }
+      },
     );
   }
 
@@ -129,8 +150,23 @@ class MusicPlayer extends Component {
     });
   }
 
+  timeShift(e) {
+    const newElapse = Math.round(parseFloat(e.target.value) * 1e2) / 1e2;
+    this.stopAudio(newElapse, true).then(() => this.playAudio());
+  }
+
+  keepingTrackSongLength(isOn = false) {
+    if (isOn)
+      this.keepTrack = setInterval(() => {
+        this.setState((prevState) => ({
+          elapsed: prevState.elapsed + 1,
+        }));
+      }, 1000);
+    else clearInterval(this.keepTrack);
+  }
+
   render() {
-    const { currentlyPlaying, volume, playedSongIndex } = this.state;
+    const { currentlyPlaying, volume, playedSongIndex, elapsed, source } = this.state;
     return (
       <div id="musicplayer_full">
         <div id="music_list">
@@ -139,7 +175,7 @@ class MusicPlayer extends Component {
             {MUSICINTEL.map((song, i) => (
               <li key={song.id}>
                 <button id={i} className="song" type="button" onClick={this.toNextAudio}>
-                  {song.name}
+                  {song.name} <span className="owner_name"> by {song.owner}</span>
                 </button>
               </li>
             ))}
@@ -153,21 +189,33 @@ class MusicPlayer extends Component {
             <h6>{MUSICINTEL[playedSongIndex].name}</h6>
           </div>
           <div>
-            <button className="prevAudio" type="button" onClick={this.toNextAudio} disabled={playedSongIndex === 0}>
-              Prev
-            </button>
-            <button type="button" onClick={this.playAudio} disabled={currentlyPlaying}>
-              Play
-            </button>
-            <button type="button" onClick={this.pauseAudio} disabled={!currentlyPlaying}>
-              Pause
-            </button>
-            <button type="button" onClick={this.stopAudio} disabled={!currentlyPlaying}>
-              Stop
-            </button>
-            <button type="button" onClick={this.toNextAudio} disabled={playedSongIndex === MUSICINTEL.length - 1}>
-              Next
-            </button>
+            <div>
+              <button className="prevAudio" type="button" onClick={this.toNextAudio} disabled={playedSongIndex === 0}>
+                Prev
+              </button>
+              <button type="button" onClick={this.playAudio} disabled={currentlyPlaying}>
+                Play
+              </button>
+              <button type="button" onClick={this.pauseAudio} disabled={!currentlyPlaying}>
+                Pause
+              </button>
+              <button type="button" onClick={() => this.stopAudio()} disabled={!currentlyPlaying}>
+                Stop
+              </button>
+              <button type="button" onClick={this.toNextAudio} disabled={playedSongIndex === MUSICINTEL.length - 1}>
+                Next
+              </button>
+            </div>
+            <div>
+              <input
+                type="range"
+                value={elapsed}
+                onChange={this.timeShift}
+                max={source && source.buffer ? source.buffer.duration : 0}
+                id="song_progess"
+              />
+              {source && source.buffer ? parseFloat(source.buffer.duration / 60).toFixed(2) : ""}
+            </div>
           </div>
           <div>
             <label htmlFor="volume">Volume</label>

@@ -16,66 +16,66 @@ const isDev = LAUNCH_COMMAND === "start" ? true : false; //check which webpack c
  * */
 
 const baseConfig = {
-    entry: {
-        main: path.resolve(__dirname, "src", "index.jsx"),
-    },
-    output: {
-        path: path.resolve(__dirname, "dist"),
-        filename: "[name].bundle.[contenthash].js",
-        clean: true,
-    },
-    optimization: {
-        minimize: true,
-        minimizer: [new CSSMinimizer(), new Terser()],
-    },
+  entry: {
+    main: path.resolve(__dirname, "src", "index.jsx"),
+  },
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "[name].bundle.[contenthash].js",
+    clean: true,
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [new CSSMinimizer(), new Terser()],
+  },
 
-    plugins: [
-        new HttpWebpackPlugin({
-            template: path.resolve(__dirname, "public", "index.html"),
-            filename: "index.html",
-            title: "Music Bay",
-        }),
+  plugins: [
+    new HttpWebpackPlugin({
+      template: path.resolve(__dirname, "public", "index.html"),
+      filename: "index.html",
+      title: "Music Bay",
+    }),
 
-        new CopyPlugin({
-            patterns: [
-                {
-                    from: path.resolve(__dirname, "public", "imgs"),
-                    to: path.resolve(__dirname, "dist", "public", "imgs")
-                },
-                {
-                    from: path.resolve(__dirname, "public", "music"),
-                    to: path.resolve(__dirname, "dist", "public", "music"),
-                }
-            ],
-        }),
-        
-        new DotEnv()
-    ],
-    module: {
-        rules: [
-            {
-                test: /\.(png|gif|jpg)$/,
-                use: [{loader: "url-loader", options: {limit: 5000}}],
-            },
-            {
-                test: /\.svg$/,
-                use: ["svg-url-loader"],
-            },
-            {
-                test: /\.(jsx|js)$/,
-                exclude: /(node_modules)/,
-                use: [
-                    {
-                        loader: "babel-loader",
-                        options: {presets: ["@babel/preset-react", "@babel/preset-env"]},
-                    },
-                ],
-            },
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, "public", "imgs"),
+          to: path.resolve(__dirname, "dist", "public", "imgs"),
+        },
+        {
+          from: path.resolve(__dirname, "public", "music"),
+          to: path.resolve(__dirname, "dist", "public", "music"),
+        },
+      ],
+    }),
+
+    new DotEnv(),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.(png|gif|jpg)$/,
+        use: [{ loader: "url-loader", options: { limit: 5000 } }],
+      },
+      {
+        test: /\.svg$/,
+        use: ["svg-url-loader"],
+      },
+      {
+        test: /\.(jsx|js)$/,
+        exclude: /(node_modules)/,
+        use: [
+          {
+            loader: "babel-loader",
+            options: { presets: ["@babel/preset-react", "@babel/preset-env"] },
+          },
         ],
-    },
-    resolve: {
-        extensions: ["",".js", ".jsx"]
-    }
+      },
+    ],
+  },
+  resolve: {
+    extensions: ["", ".js", ".jsx"],
+  },
 };
 
 /*
@@ -86,22 +86,22 @@ const baseConfig = {
  */
 
 const prodConfig = {
-    mode: "production",
-    module: {
-        rules: [
-            ...baseConfig.module.rules,
-            {
-                test: /\.scss$/,
-                use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
-            },
-        ],
-    },
-    plugins: [...baseConfig.plugins, new MiniCssExtractPlugin()],
-    performance: {
-        hints: false,
-        maxEntrypointSize: 512000,
-        maxAssetSize: 512000
-    }
+  mode: "production",
+  module: {
+    rules: [
+      ...baseConfig.module.rules,
+      {
+        test: /\.scss$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
+    ],
+  },
+  plugins: [...baseConfig.plugins, new MiniCssExtractPlugin()],
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
 };
 
 /*
@@ -111,28 +111,26 @@ const prodConfig = {
  * */
 
 const devConfigs = {
-    mode: "development",
-    devServer: {
-        client :{
-            logging: "error",
-        },
-        port: 5050,
-        hot: true,
-        open: true,
-        compress: true,
-        historyApiFallback: true,
+  mode: "development",
+  devServer: {
+    client: {
+      logging: "error",
     },
-    module: {
-        rules: [
-            ...baseConfig.module.rules,
-            {
-                test: /\.scss$/,
-                use: ["style-loader", "css-loader", "sass-loader"],
-            },
-        ],
-    },
+    port: 5050,
+    hot: true,
+    open: true,
+    compress: true,
+    historyApiFallback: true,
+  },
+  module: {
+    rules: [
+      ...baseConfig.module.rules,
+      {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
+    ],
+  },
 };
 
-module.exports = isDev
-    ? {...baseConfig, ...devConfigs}
-    : {...baseConfig, ...prodConfig};
+module.exports = isDev ? { ...baseConfig, ...devConfigs } : { ...baseConfig, ...prodConfig };
