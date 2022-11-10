@@ -14,6 +14,7 @@
     font-family: $secondary-heading-font;
     background: linear-gradient(to right, $fifth-color, $fourth-color);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
@@ -26,7 +27,6 @@
     width: 100%;
     height: 70%;
 
-
     .card {
       width: 30%;
       height: 10%;
@@ -38,7 +38,7 @@
       border-radius: 20%;
       text-decoration: none;
       position: relative;
-      color: $first-color ;
+      color: $first-color;
       cursor: pointer;
 
       & > .card-header {
@@ -46,7 +46,7 @@
         font-size: 1.5rem;
         z-index: 2;
       }
-      
+
       &::after {
         content: "";
         position: absolute;
@@ -60,7 +60,7 @@
         transition: all 500ms;
       }
 
-      &:hover{
+      &:hover {
         color: $third-color;
 
         &::after {

@@ -16,7 +16,7 @@ function Categories() {
       <h1>what to you want to hear today ? </h1>
       <div id="cards">
         {AvailableCategs.map((ele, i) => (
-          <Link key={ele.id} to="/player" className="card" id={i}>
+          <Link key={ele.id} to="/player" state={{ genre: ele.genre }} className="card" id={i}>
             <h5 className="card-header">{ele.genre}</h5>
           </Link>
         ))}

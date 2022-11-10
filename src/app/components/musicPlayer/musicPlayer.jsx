@@ -1,19 +1,76 @@
 import React, { Component } from "react";
 import "./musicPlayer.scss";
+import { useLocation } from "react-router-dom";
+import propTypes from "prop-types";
 import Buffers from "./buffer.service";
-import { MusicSeparator } from "../illustrations/logosAndBg";
+import {
+  MusicSeparator,
+  MusicPlay,
+  MusicPause,
+  MusicStop,
+  MusicNextSong,
+  MusicPrevSong,
+  MusicPlaylistIcon,
+  MusicPlayingLogo,
+} from "../illustrations/logosAndBg";
 
 const MusicPublicUrl = process.env.PUBLICURL;
-const MUSICINTEL = [
-  { id: 1, name: "Wondeful World", owner: "Louis Armstrong", link: `${MusicPublicUrl}jazz1.mp3` },
-  { id: 2, name: "Sky is Crying", owner: "Gary B.B. Coleman", link: `${MusicPublicUrl}jazz2.mp3` },
-];
 
+/**
+ * Helper functions
+ */
+function timeExtraction(fullLength, timePassed) {
+  const timeLeft = fullLength - timePassed;
+  let timeLeftMinutes = Math.floor(timeLeft / 60);
+  let timeLeftSeconds = Math.round(timeLeft % 60);
+
+  if (timeLeftMinutes < 10) timeLeftMinutes = "0".concat(timeLeftMinutes);
+  if (timeLeftSeconds < 10) timeLeftSeconds = "0".concat(timeLeftSeconds);
+  return timeLeftMinutes.concat(":", timeLeftSeconds);
+}
+
+/**
+ *
+ * @param {MusicPlayer} WrappedComp
+ * @returns The Music Player compenent
+ * this HOC was created to enbale the use of useLocation hook without changing Music player from a class to a functional compoenent
+ */
+
+const HigherOrderComp = (WrappedComp) =>
+  function _() {
+    const { state } = useLocation();
+    const musicList = [
+      {
+        id: 1,
+        name: "Wondeful World",
+        owner: "Louis Armstrong",
+        link: `${MusicPublicUrl}music/${state.genre}/jazz1.mp3`,
+      },
+      {
+        id: 2,
+        name: "Sky is Crying",
+        owner: "Gary B.B. Coleman",
+        link: `${MusicPublicUrl}music/${state.genre}/jazz2.mp3`,
+      },
+      {
+        id: 3,
+        name: "Fly Me to the moon",
+        owner: "Frank Sinatra",
+        link: `${MusicPublicUrl}music/${state.genre}/jazz3.mp3`,
+      },
+      { id: 4, name: "Fever", owner: "Peggy Lee", link: `${MusicPublicUrl}music/${state.genre}/jazz4.mp3` },
+    ];
+    return <WrappedComp genre={state.genre} musicList={musicList} />;
+  };
+
+/* Class */
 class MusicPlayer extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.audioContext = new AudioContext();
     this.keepTrack = undefined;
+    this.startedSince = 0;
+    this.MusicList = props.musicList;
     this.state = {
       bufferAudio: [],
       gainNode: null,
@@ -28,7 +85,7 @@ class MusicPlayer extends Component {
     this.playAudio = this.playAudio.bind(this);
     this.startingSource = this.startingSource.bind(this);
     this.stopAudio = this.stopAudio.bind(this);
-    this.toNextAudio = this.toNextAudio.bind(this);
+    this.switchSong = this.switchSong.bind(this);
     this.pauseAudio = this.pauseAudio.bind(this);
     this.changeVolume = this.changeVolume.bind(this);
     this.timeShift = this.timeShift.bind(this);
@@ -49,7 +106,7 @@ class MusicPlayer extends Component {
 
   async init() {
     this.setState({ isLoadingMusic: true });
-    const buffer = new Buffers(this.audioContext, Object.values(MUSICINTEL));
+    const buffer = new Buffers(this.audioContext, Object.values(this.MusicList));
     const buffers = await buffer.loadAll();
     this.setState(
       {
@@ -102,6 +159,7 @@ class MusicPlayer extends Component {
     const { source } = this.state;
     return new Promise((resolve) => {
       source.stop();
+      this.startedSince = elapsed_p;
       this.keepingTrackSongLength();
       this.setState(
         {
@@ -115,26 +173,29 @@ class MusicPlayer extends Component {
     });
   }
 
-  toNextAudio(e) {
+  async switchSong(e) {
     const { currentlyPlaying } = this.state;
-    if (currentlyPlaying) this.stopAudio();
+    if (currentlyPlaying) await this.stopAudio();
     this.setState(
       (prevState) => {
-        if (e.target.className === "song") {
-          return {
-            playedSongIndex: parseInt(e.target.id, 10),
-            source: this.audioContext.createBufferSource(),
-          };
-        }
-        if (e.target.className === "prevAudio") {
-          return {
-            playedSongIndex: prevState.playedSongIndex - 1,
-            source: this.audioContext.createBufferSource(),
-          };
+        const newSource = this.audioContext.createBufferSource();
+        if (e) {
+          if (e.target.className === "song") {
+            return {
+              playedSongIndex: parseInt(e.target.id, 10),
+              source: newSource,
+            };
+          }
+          if (e.target.id === "prevSong") {
+            return {
+              playedSongIndex: prevState.playedSongIndex - 1,
+              source: newSource,
+            };
+          }
         }
         return {
           playedSongIndex: prevState.playedSongIndex + 1,
-          source: this.audioContext.createBufferSource(),
+          source: newSource,
         };
       },
       () => {
@@ -151,62 +212,109 @@ class MusicPlayer extends Component {
   }
 
   timeShift(e) {
-    const newElapse = Math.round(parseFloat(e.target.value) * 1e2) / 1e2;
-    this.stopAudio(newElapse, true).then(() => this.playAudio());
+    const newElapsed = Math.round(parseFloat(e.target.value) * 1e2) / 1e2;
+    this.startedSince = newElapsed;
+    this.stopAudio(newElapsed, true).then(() => this.playAudio());
   }
 
   keepingTrackSongLength(isOn = false) {
+    const { source, playedSongIndex } = this.state;
+
     if (isOn)
       this.keepTrack = setInterval(() => {
-        this.setState((prevState) => ({
-          elapsed: prevState.elapsed + 1,
-        }));
+        if (Math.round(source.buffer.duration - this.startedSince) === 0) {
+          if (playedSongIndex + 1 < this.MusicList.length) {
+            this.switchSong();
+          } else {
+            this.stopAudio(0);
+          }
+          return;
+        }
+        this.startedSince += 1;
+        this.setState((prevState) => ({ elapsed: prevState.elapsed + 1 }));
       }, 1000);
     else clearInterval(this.keepTrack);
   }
 
   render() {
     const { currentlyPlaying, volume, playedSongIndex, elapsed, source } = this.state;
+    const { genre } = this.props;
     return (
       <div id="musicplayer_full">
         <div id="music_list">
-          <h1>Available Songs</h1>
-          <ul>
-            {MUSICINTEL.map((song, i) => (
-              <li key={song.id}>
-                <button id={i} className="song" type="button" onClick={this.toNextAudio}>
-                  {song.name} <span className="owner_name"> by {song.owner}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+          <div id="heading">
+            <MusicPlaylistIcon className="heading-logo" />
+            <div id="heading-texts">
+              <h1>{genre} Hits</h1>
+              <p>
+                Playlist - <span>{this.MusicList.length} songs</span>
+              </p>
+            </div>
+          </div>
+          <div id="songsList">
+            <ul>
+              {this.MusicList.map((song, i) => (
+                <li key={song.id}>
+                  <button id={i} className="song" type="button" onClick={this.switchSong}>
+                    {song.name} <span className="owner_name"> by {song.owner}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <div id="controls">
           <div id="separator">
             <MusicSeparator />
           </div>
-          <div>
-            <h6>{MUSICINTEL[playedSongIndex].name}</h6>
+          <div id="currentlyPlaying">
+            <MusicPlayingLogo />
+            <div>
+              <span id="currentlyPlayingName">{this.MusicList[playedSongIndex].name}</span>
+              <span id="currentlyPlayingSinger">{this.MusicList[playedSongIndex].owner}</span>
+            </div>
           </div>
           <div>
             <div>
-              <button className="prevAudio" type="button" onClick={this.toNextAudio} disabled={playedSongIndex === 0}>
-                Prev
+              <button
+                id="prevSong"
+                className={playedSongIndex === 0 ? "controlBtnNotActive" : "controlBtnActive"}
+                type="button"
+                onClick={this.switchSong}
+              >
+                <MusicPrevSong />
               </button>
-              <button type="button" onClick={this.playAudio} disabled={currentlyPlaying}>
-                Play
+              <button
+                className={currentlyPlaying ? "controlBtnNotActive" : "controlBtnActive"}
+                type="button"
+                onClick={this.playAudio}
+              >
+                <MusicPlay />
               </button>
-              <button type="button" onClick={this.pauseAudio} disabled={!currentlyPlaying}>
-                Pause
+              <button
+                className={!currentlyPlaying ? "controlBtnNotActive" : "controlBtnActive"}
+                type="button"
+                onClick={this.pauseAudio}
+              >
+                <MusicPause />
               </button>
-              <button type="button" onClick={() => this.stopAudio()} disabled={!currentlyPlaying}>
-                Stop
+              <button
+                className={!currentlyPlaying ? "controlBtnNotActive" : "controlBtnActive"}
+                type="button"
+                onClick={() => this.stopAudio()}
+              >
+                <MusicStop />
               </button>
-              <button type="button" onClick={this.toNextAudio} disabled={playedSongIndex === MUSICINTEL.length - 1}>
-                Next
+              <button
+                className={playedSongIndex === this.MusicList.length - 1 ? "controlBtnNotActive" : "controlBtnActive"}
+                type="button"
+                onClick={this.switchSong}
+                disabled={playedSongIndex === this.MusicList.length - 1}
+              >
+                <MusicNextSong />
               </button>
             </div>
-            <div>
+            <div id="song_progess_container">
               <input
                 type="range"
                 value={elapsed}
@@ -214,7 +322,9 @@ class MusicPlayer extends Component {
                 max={source && source.buffer ? source.buffer.duration : 0}
                 id="song_progess"
               />
-              {source && source.buffer ? parseFloat(source.buffer.duration / 60).toFixed(2) : ""}
+              <span id="time-display">
+                {source && source.buffer ? timeExtraction(source.buffer.duration, this.startedSince) : "00:00"}
+              </span>
             </div>
           </div>
           <div>
@@ -227,4 +337,14 @@ class MusicPlayer extends Component {
   }
 }
 
-export default MusicPlayer;
+MusicPlayer.propTypes = {
+  genre: propTypes.string,
+  musicList: propTypes.arrayOf(Object),
+};
+
+MusicPlayer.defaultProps = {
+  genre: "",
+  musicList: [],
+};
+
+export default HigherOrderComp(MusicPlayer);

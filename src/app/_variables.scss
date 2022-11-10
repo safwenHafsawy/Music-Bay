@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Copse&display=swap");
 
 //colors
 $first-color: #24225c;
@@ -14,60 +15,7 @@ $shadow-color: #ababab;
 $main-heading-font: "Roboto Mono", monospace;
 $secondary-heading-font: "Pacifico", cursive;
 $regular-text-font: "Noto Serif", serif;
-
-//mixins
-@mixin btnStyle($bg_color_p) {
-  background-color: $bg_color_p;
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
-  font-family: $secondary-heading-font;
-  font-weight: bold;
-  color: $third-color;
-
-  &:active {
-    @if ($bg_color_p == $second-color) {
-      box-shadow: inset 0px 0px 20px 20px $fourth-color;
-    } @else {
-      box-shadow: inset 0px 0px 20px 20px $second-color;
-    }
-  }
-}
-
-@mixin home-separtor($fill_color_p) {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-  transform: rotate(180deg);
-
-  & > svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 150px;
-    fill: $fill_color_p;
-  }
-}
-
-@mixin music-separtor($fill_color_p) {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-
-  & > svg {
-    position: relative;
-    display: block;
-    width: calc(100% + 1.3px);
-    height: 50px;
-    fill: $fill_color_p;
-  }
-}
+$numbers-font: "Copse", serif;
 
 //animations
 @keyframes sound_1 {

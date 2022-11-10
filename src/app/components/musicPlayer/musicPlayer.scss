@@ -1,4 +1,5 @@
 @import "../../_variables.scss";
+@import "../../mixins";
 
 #musicplayer_full {
   background-color: $third-color;
@@ -8,6 +9,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  animation: fadein 1s linear;
 
   #music_list {
     position: relative;
@@ -19,26 +21,114 @@
     justify-content: space-evenly;
     align-items: center;
 
-    & > h1 {
-      font: 2rem $secondary-heading-font;
-      background: linear-gradient(45deg, $fourth-color, $fifth-color);
-      -webkit-text-fill-color: transparent;
-      -webkit-background-clip: text;
-      background-clip: text;
-    }
-
-    ul {
-      list-style: none;
-      li > .song {
-        border: none;
-        color: $second-color;
-        color: $first-color;
-        background-clip: text;
-        font: bold 1rem $regular-text-font;
-        cursor: pointer;
+    #heading {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      width: 100%;
+      height: fit-content;
+      .heading-logo {
+        fill: $second-color;
+        width: 10%;
+        height: 100%;
+        padding: 2%;
+        box-sizing: border-box;
+        border: 3px solid $second-color;
+        border-radius: 40%;
+        display: flex;
+        justify-content: flex-end;
       }
-      .owner_name {
-        font-size: 0.6rem;
+      #heading-texts {
+        display: flex;
+        background-color: $third-color;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: -10px;
+        z-index: 2;
+        position: relative;
+        cursor: none;
+
+        & > h1 {
+          font: 4rem $secondary-heading-font;
+          background: linear-gradient(90deg, $fourth-color, $second-color, $fifth-color);
+          -webkit-text-fill-color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+        }
+        & > p {
+          font: 0.8rem $regular-text-font;
+          position: absolute;
+          top: 15%;
+          left: 5px;
+          color: $second-color;
+          span {
+            font: italic 0.8rem $numbers-font;
+          }
+        }
+      }
+    }
+    #songsList {
+      width: 100%;
+      height: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-y: auto;
+      ul {
+        list-style: none;
+        height: 100%;
+        width: 50%;
+
+        li > .song {
+          width: 100%;
+          height: 50px;
+          margin: 5px;
+          border: none;
+          border-radius: 50px;
+          color: $first-color;
+          background-color: transparent;
+          font: bold 1rem $regular-text-font;
+          cursor: pointer;
+          transition: all 500ms;
+          box-shadow: 0px 0px 10px 0px $shadow-color;
+          position: relative;
+          z-index: 2;
+
+          .owner_name {
+            font-size: 0.6rem;
+            font-style: italic;
+          }
+
+          &::before {
+            content: "Click To Play Song";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, $fourth-color, $second-color, $fifth-color);
+            border-radius: 50px;
+            opacity: 0;
+            transition: all 500ms;
+            color: $third-color;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          &:hover {
+            transform: scale(0.9);
+            background-color: $second-color;
+            box-shadow: 0px 0px 0px;
+            & > * {
+              color: $third-color;
+              z-index: 2;
+            }
+            &::before {
+              opacity: 1;
+            }
+          }
+        }
       }
     }
   }
@@ -54,14 +144,87 @@
     justify-content: space-between;
     align-items: center;
     padding: 0px 12px;
+    z-index: 5;
 
     #separator {
       @include music-separtor($third-color);
     }
 
-    & > div > h6 {
-      &::before {
-        content: "Currently Playing : ";
+    & > div:not(#separator) {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2%;
+
+      &:nth-child(2) {
+        display: flex;
+        flex-direction: row;
+
+        & > svg {
+          fill: url(#fillingColorLogo);
+          width: 10%;
+          height: 10%;
+        }
+
+        & > div {
+          display: flex;
+          flex-direction: column;
+          margin-left: 10px;
+          color: $third-color;
+
+          #currentlyPlayingName {
+            font: 0.8rem $main-heading-font;
+          }
+
+          #currentlyPlayingSinger {
+            font: italic 0.5rem $regular-text-font;
+          }
+        }
+      }
+
+      &:nth-child(3) {
+        display: flex;
+        flex-direction: column;
+        .controlBtnActive {
+          @include activeControlBtn;
+        }
+
+        .controlBtnNotActive {
+          @include notActiveControlBtn;
+        }
+
+        #song_progess_container {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-evenly;
+          width: 90%;
+          color: $third-color;
+          input[type="range"] {
+            @include sliderStyle(80%);
+          }
+
+          #time-display {
+            font: 1rem $numbers-font;
+          }
+        }
+      }
+
+      &:nth-child(4) {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+
+        label {
+          color: $third-color;
+          font: 1rem $main-heading-font;
+        }
+
+        #volume {
+          @include sliderStyle(50%);
+        }
       }
     }
   }
