@@ -1,7 +1,6 @@
 import React from "react";
-import "./logosAndBg.scss";
 
-function HomeBG() {
+function BrandLogo() {
   return (
     <svg viewBox="0 0 326 333" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="logo">
@@ -217,7 +216,7 @@ function MusicPlayingLogo() {
 }
 
 export {
-  HomeBG,
+  BrandLogo,
   HomeSeparator,
   MusicSeparator,
   MusicPlay,

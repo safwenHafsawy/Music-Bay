@@ -17,6 +17,11 @@ $secondary-heading-font: "Pacifico", cursive;
 $regular-text-font: "Noto Serif", serif;
 $numbers-font: "Copse", serif;
 
+//z-index varibales
+$music-controls-zindex: 4;
+$navbar-zindex: 5;
+$home-page-zindex: 6;
+
 //animations
 @keyframes sound_1 {
   0% {

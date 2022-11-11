@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./home.scss";
-import { HomeBG, HomeSeparator } from "../illustrations/logosAndBg";
+import { BrandLogo, HomeSeparator } from "../illustrations/logosAndBg";
 
 export default function HomePage() {
   return (
@@ -10,7 +10,7 @@ export default function HomePage() {
         <div id="home-headers-logo">
           <h1>Welcome to </h1>
           <h3>Home to your favorite music</h3>
-          <HomeBG />
+          <BrandLogo />
         </div>
         <div id="get-started-action">
           <button type="button">

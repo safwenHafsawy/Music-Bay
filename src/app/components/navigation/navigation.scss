@@ -1,0 +1,50 @@
+@import "../../variables";
+@import "../../mixins";
+
+/**
+ * Styling the Toggle Btn
+ */
+.hide-toggle {
+  display: none;
+}
+.show-toggle {
+  position: fixed;
+  top: 2%;
+  left: 2%;
+  z-index: 3;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+
+  svg {
+    @include HomeLogo(true, 50px, 50px);
+  }
+
+  span {
+    color: $first-color;
+    font-family: $secondary-heading-font;
+  }
+}
+
+/**
+ * Styling navbar vista version
+ */
+
+.vista {
+  @include Naviagtion;
+}
+
+/**
+ * Styling navbar hamburger version
+ */
+
+.hide-hamburger-bar {
+  display: none;
+}
+
+.show-hamburger-bar {
+  @include Naviagtion;
+}

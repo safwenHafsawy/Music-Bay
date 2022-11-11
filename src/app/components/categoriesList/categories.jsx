@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import NaviagtionWrapper from "../navigation/NaviagationWrapper";
 import "./categories.scss";
 
 const AvailableCategs = [
@@ -25,4 +26,4 @@ function Categories() {
   );
 }
 
-export default Categories;
+export default NaviagtionWrapper(Categories);

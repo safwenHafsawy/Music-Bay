@@ -3,6 +3,7 @@ import "./musicPlayer.scss";
 import { useLocation } from "react-router-dom";
 import propTypes from "prop-types";
 import Buffers from "./buffer.service";
+import NaviagtionWrapper from "../navigation/NaviagationWrapper";
 import {
   MusicSeparator,
   MusicPlay,
@@ -31,9 +32,9 @@ function timeExtraction(fullLength, timePassed) {
 
 /**
  *
- * @param {MusicPlayer} WrappedComp
- * @returns The Music Player compenent
- * this HOC was created to enbale the use of useLocation hook without changing Music player from a class to a functional compoenent
+ * @param {Class} Music Player component
+ *
+ * this HOC was created mainly to enbale the use of useLocation hook without changing Music player from a class to a functional component
  */
 
 const HigherOrderComp = (WrappedComp) =>
@@ -57,7 +58,8 @@ const HigherOrderComp = (WrappedComp) =>
         name: "Fly Me to the moon",
         owner: "Frank Sinatra",
         link: `${MusicPublicUrl}music/${state.genre}/jazz3.mp3`,
-      },
+      }, //
+
       { id: 4, name: "Fever", owner: "Peggy Lee", link: `${MusicPublicUrl}music/${state.genre}/jazz4.mp3` },
     ];
     return <WrappedComp genre={state.genre} musicList={musicList} />;
@@ -102,6 +104,13 @@ class MusicPlayer extends Component {
         this.init();
       },
     );
+  }
+
+  componentWillUnmount() {
+    const { currentlyPlaying } = this.state;
+    if (currentlyPlaying) {
+      this.stopAudio().then(() => this.audioContext.close());
+    }
   }
 
   async init() {
@@ -186,7 +195,7 @@ class MusicPlayer extends Component {
               source: newSource,
             };
           }
-          if (e.target.id === "prevSong") {
+          if (e.target.closest("#prevSong")) {
             return {
               playedSongIndex: prevState.playedSongIndex - 1,
               source: newSource,
@@ -222,7 +231,7 @@ class MusicPlayer extends Component {
 
     if (isOn)
       this.keepTrack = setInterval(() => {
-        if (Math.round(source.buffer.duration - this.startedSince) === 0) {
+        if (Math.floor(source.buffer.duration - this.startedSince) === 0) {
           if (playedSongIndex + 1 < this.MusicList.length) {
             this.switchSong();
           } else {
@@ -281,6 +290,7 @@ class MusicPlayer extends Component {
                 className={playedSongIndex === 0 ? "controlBtnNotActive" : "controlBtnActive"}
                 type="button"
                 onClick={this.switchSong}
+                disabled={playedSongIndex === 0}
               >
                 <MusicPrevSong />
               </button>
@@ -288,6 +298,7 @@ class MusicPlayer extends Component {
                 className={currentlyPlaying ? "controlBtnNotActive" : "controlBtnActive"}
                 type="button"
                 onClick={this.playAudio}
+                disabled={currentlyPlaying}
               >
                 <MusicPlay />
               </button>
@@ -295,6 +306,7 @@ class MusicPlayer extends Component {
                 className={!currentlyPlaying ? "controlBtnNotActive" : "controlBtnActive"}
                 type="button"
                 onClick={this.pauseAudio}
+                disabled={!currentlyPlaying}
               >
                 <MusicPause />
               </button>
@@ -302,6 +314,7 @@ class MusicPlayer extends Component {
                 className={!currentlyPlaying ? "controlBtnNotActive" : "controlBtnActive"}
                 type="button"
                 onClick={() => this.stopAudio()}
+                disabled={!currentlyPlaying}
               >
                 <MusicStop />
               </button>
@@ -347,4 +360,4 @@ MusicPlayer.defaultProps = {
   musicList: [],
 };
 
-export default HigherOrderComp(MusicPlayer);
+export default NaviagtionWrapper(HigherOrderComp(MusicPlayer));

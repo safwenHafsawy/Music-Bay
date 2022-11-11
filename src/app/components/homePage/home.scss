@@ -21,6 +21,10 @@
       align-items: center;
       justify-content: space-evenly;
 
+      & > svg {
+        @include HomeLogo(false, 200px, 200px);
+      }
+
       & > h1 {
         font-family: $main-heading-font;
         font-size: 3rem;
