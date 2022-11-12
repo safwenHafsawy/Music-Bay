@@ -13,9 +13,9 @@ import {
   MusicPrevSong,
   MusicPlaylistIcon,
   MusicPlayingLogo,
+  NotFound,
 } from "../illustrations/logosAndBg";
-
-const MusicPublicUrl = process.env.PUBLICURL;
+import getMusicList from "./musicList";
 
 /**
  * Helper functions
@@ -40,28 +40,8 @@ function timeExtraction(fullLength, timePassed) {
 const HigherOrderComp = (WrappedComp) =>
   function _() {
     const { state } = useLocation();
-    const musicList = [
-      {
-        id: 1,
-        name: "Wondeful World",
-        owner: "Louis Armstrong",
-        link: `${MusicPublicUrl}music/${state.genre}/jazz1.mp3`,
-      },
-      {
-        id: 2,
-        name: "Sky is Crying",
-        owner: "Gary B.B. Coleman",
-        link: `${MusicPublicUrl}music/${state.genre}/jazz2.mp3`,
-      },
-      {
-        id: 3,
-        name: "Fly Me to the moon",
-        owner: "Frank Sinatra",
-        link: `${MusicPublicUrl}music/${state.genre}/jazz3.mp3`,
-      }, //
+    const musicList = getMusicList(state.genre);
 
-      { id: 4, name: "Fever", owner: "Peggy Lee", link: `${MusicPublicUrl}music/${state.genre}/jazz4.mp3` },
-    ];
     return <WrappedComp genre={state.genre} musicList={musicList} />;
   };
 
@@ -260,17 +240,24 @@ class MusicPlayer extends Component {
               </p>
             </div>
           </div>
-          <div id="songsList">
-            <ul>
-              {this.MusicList.map((song, i) => (
-                <li key={song.id}>
-                  <button id={i} className="song" type="button" onClick={this.switchSong}>
-                    {song.name} <span className="owner_name"> by {song.owner}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {this.MusicList.length === 0 ? (
+            <div id="emptyList">
+              <NotFound />
+              <h3>Oops ! looks there&apos;s no {genre} songs at this moment</h3>
+            </div>
+          ) : (
+            <div id="songsList">
+              <ul>
+                {this.MusicList.map((song, i) => (
+                  <li key={song[0]}>
+                    <button id={i} className="song" type="button" onClick={this.switchSong}>
+                      {song[1].name} <span className="owner_name"> by {song[1].owner}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
         <div id="controls">
           <div id="separator">
@@ -278,27 +265,31 @@ class MusicPlayer extends Component {
           </div>
           <div id="currentlyPlaying">
             <MusicPlayingLogo />
-            <div>
-              <span id="currentlyPlayingName">{this.MusicList[playedSongIndex].name}</span>
-              <span id="currentlyPlayingSinger">{this.MusicList[playedSongIndex].owner}</span>
-            </div>
+            {this.MusicList.length > 0 ? (
+              <div>
+                <span id="currentlyPlayingName">{this.MusicList[playedSongIndex].name}</span>
+                <span id="currentlyPlayingSinger">{this.MusicList[playedSongIndex].owner}</span>
+              </div>
+            ) : null}
           </div>
           <div>
             <div>
               <button
                 id="prevSong"
-                className={playedSongIndex === 0 ? "controlBtnNotActive" : "controlBtnActive"}
+                className={
+                  playedSongIndex === 0 || this.MusicList.length === 0 ? "controlBtnNotActive" : "controlBtnActive"
+                }
                 type="button"
                 onClick={this.switchSong}
-                disabled={playedSongIndex === 0}
+                disabled={playedSongIndex === 0 || this.MusicList.length === 0}
               >
                 <MusicPrevSong />
               </button>
               <button
-                className={currentlyPlaying ? "controlBtnNotActive" : "controlBtnActive"}
+                className={currentlyPlaying || this.MusicList.length === 0 ? "controlBtnNotActive" : "controlBtnActive"}
                 type="button"
                 onClick={this.playAudio}
-                disabled={currentlyPlaying}
+                disabled={currentlyPlaying || this.MusicList.length === 0}
               >
                 <MusicPlay />
               </button>
@@ -319,10 +310,14 @@ class MusicPlayer extends Component {
                 <MusicStop />
               </button>
               <button
-                className={playedSongIndex === this.MusicList.length - 1 ? "controlBtnNotActive" : "controlBtnActive"}
+                className={
+                  playedSongIndex === this.MusicList.length - 1 || this.MusicList.length === 0
+                    ? "controlBtnNotActive"
+                    : "controlBtnActive"
+                }
                 type="button"
                 onClick={this.switchSong}
-                disabled={playedSongIndex === this.MusicList.length - 1}
+                disabled={playedSongIndex === this.MusicList.length - 1 || this.MusicList.length === 0}
               >
                 <MusicNextSong />
               </button>

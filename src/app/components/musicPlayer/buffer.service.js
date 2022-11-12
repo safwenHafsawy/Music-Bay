@@ -16,7 +16,7 @@ export default class Buffers {
   async loadAll() {
     const urls = [];
     this.musicInfo.forEach((element) => {
-      urls.push(element.link);
+      urls.push(element[1].link);
     });
 
     for (let i = 0; i < urls.length; i += 1) {
