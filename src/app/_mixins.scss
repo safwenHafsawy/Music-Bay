@@ -253,3 +253,37 @@
     }
   }
 }
+
+/**
+ * Categories Mixins
+ */
+@mixin cardSide($right) {
+  width: 20%;
+  height: 30%;
+  position: relative;
+  border: 5px solid $first-color;
+  opacity: 0.3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font: 1.5rem $main-heading-font;
+  cursor: pointer;
+  transition: all 500ms;
+
+  @if ($right) {
+    right: 5%;
+    background: linear-gradient(90deg, $second-color, $third-color);
+    border-radius: 20% 0 0 20%;
+    border-width: 5px 0px 5px 0px;
+  } @else {
+    left: 5%;
+    background: linear-gradient(90deg, $third-color, $fourth-color);
+    border-radius: 0 20% 20% 0;
+    border: 5px solid $first-color;
+    border-width: 5px 0px 5px 0px;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

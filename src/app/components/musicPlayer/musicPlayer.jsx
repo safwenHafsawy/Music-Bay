@@ -267,8 +267,8 @@ class MusicPlayer extends Component {
             <MusicPlayingLogo />
             {this.MusicList.length > 0 ? (
               <div>
-                <span id="currentlyPlayingName">{this.MusicList[playedSongIndex].name}</span>
-                <span id="currentlyPlayingSinger">{this.MusicList[playedSongIndex].owner}</span>
+                <span id="currentlyPlayingName">{this.MusicList[playedSongIndex][1].name}</span>
+                <span id="currentlyPlayingSinger">{this.MusicList[playedSongIndex][1].owner}</span>
               </div>
             ) : null}
           </div>

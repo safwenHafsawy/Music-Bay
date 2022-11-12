@@ -1,4 +1,5 @@
 @import "../../variables";
+@import "../../mixins";
 
 #categories {
   background-color: $third-color;
@@ -11,36 +12,64 @@
   align-items: center;
   animation: fadein 500ms ease-out;
 
-  & > h1 {
-    font-family: $secondary-heading-font;
-    background: linear-gradient(to right, $fifth-color, $fourth-color);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+  #heading {
+    position: relative;
+    width: 100%;
+    background-color: $first-color;
+    & > h1 {
+      font-family: $secondary-heading-font;
+      background-color: $third-color;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 5%;
+      padding: 0;
+      text-align: center;
+    }
   }
 
   #cards {
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     width: 100%;
-    height: 70%;
+    height: 100%;
+    position: relative;
 
-    .card {
+    #separator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+
+      & > svg {
+        position: relative;
+        display: block;
+        width: calc(100% + 1.3px);
+        height: 150px;
+        fill: $first-color;
+      }
+    }
+
+    .card-main {
       width: 30%;
-      height: 10%;
+      height: 40%;
       border: 5px inset $first-color;
       margin: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
+      text-align: center;
       border-radius: 20%;
       text-decoration: none;
       position: relative;
-      color: $first-color;
+      color: $third-color;
+      background: linear-gradient(90deg, $fourth-color, $second-color);
       cursor: pointer;
+      z-index: 2;
 
       & > .card-header {
         font-family: $secondary-heading-font;
@@ -50,23 +79,31 @@
 
       &::after {
         content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, $fourth-color, $second-color);
-        border-radius: 15%;
+        position: absolute;
+        left: 0;
+        top: 0;
         opacity: 0;
+        border-radius: 20%;
+        background: linear-gradient(90deg, $fifth-color, $second-color);
         transition: all 500ms;
       }
 
       &:hover {
-        color: $third-color;
-
         &::after {
           opacity: 1;
         }
+      }
+    }
+
+    .card-side {
+      &:nth-child(2) {
+        @include cardSide(false);
+      }
+
+      &:last-child {
+        @include cardSide(true);
       }
     }
   }
