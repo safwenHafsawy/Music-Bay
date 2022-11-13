@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import NaviagtionWrapper from "../navigation/NaviagationWrapper";
-import { CategoriesSeparator } from "../illustrations/logosAndBg";
+import { CategoriesSeparator, RightSwipe, LeftSwipe } from "../illustrations/logosAndBg";
 import "./categories.scss";
 
 const AvailableGenre = [
@@ -14,22 +14,16 @@ const AvailableGenre = [
 
 function Categories() {
   const [currentlyDisplayed, setCurrentlyDisplay] = useState(2);
-  const [prevDisplay, setPrevDisplay] = useState(1);
-  const [nexDisplay, setNextDisplay] = useState(3);
 
   const changeGenre = (e) => {
-    const id = parseInt(e.target.id, 10);
-    setCurrentlyDisplay(id);
-    if (id === 0) {
-      setPrevDisplay(4);
-      setNextDisplay(id + 1);
-    } else if (id === 4) {
-      setPrevDisplay(id - 1);
-      setNextDisplay(0);
-    } else {
-      setPrevDisplay(id - 1);
-      setNextDisplay(id + 1);
+    if (e.target.closest("#left-swipe")) {
+      if (currentlyDisplayed > 0) setCurrentlyDisplay(currentlyDisplayed - 1);
+      else setCurrentlyDisplay(4);
+      return;
     }
+
+    if (currentlyDisplayed === 4) setCurrentlyDisplay(0);
+    else setCurrentlyDisplay(currentlyDisplayed + 1);
   };
 
   return (
@@ -42,8 +36,8 @@ function Categories() {
         <div id="separator">
           <CategoriesSeparator />
         </div>
-        <button className="card-side" id={prevDisplay} type="button" onClick={changeGenre}>
-          {AvailableGenre[prevDisplay].genre}
+        <button className="card-side" id="left-swipe" type="button" onClick={changeGenre}>
+          <LeftSwipe id="left-swipe=logo" />
         </button>
         <Link
           to="/player"
@@ -53,8 +47,8 @@ function Categories() {
         >
           <h5 className="card-header">{AvailableGenre[currentlyDisplayed].genre}</h5>
         </Link>
-        <button className="card-side" id={nexDisplay} type="button" onClick={changeGenre}>
-          {AvailableGenre[nexDisplay].genre}
+        <button className="card-side" id="right-swipe" type="button" onClick={changeGenre}>
+          <RightSwipe id="right-swipe-logo" />
         </button>
       </div>
     </div>

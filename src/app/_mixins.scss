@@ -283,7 +283,14 @@
     border-width: 5px 0px 5px 0px;
   }
 
+  svg {
+    stroke: $first-color;
+    fill: $first-color;
+    width: 50%;
+    transition: all 500ms;
+  }
+
   &:hover {
-    opacity: 0.7;
+    opacity: 1;
   }
 }
