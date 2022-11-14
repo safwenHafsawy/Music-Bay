@@ -92,8 +92,8 @@ function MusicPlay() {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <defs>
         <linearGradient id="fillingColor">
-          <stop offset="5%" style={{ stopColor: "#4ad8ce" }} />
-          <stop offset="95%" style={{ stopColor: "#c939e6" }} />
+          <stop offset="5%" style={{ stopColor: "#5e17eb" }} />
+          <stop offset="95%" style={{ stopColor: "#cb6ce6" }} />
         </linearGradient>
       </defs>
       <path
@@ -110,8 +110,8 @@ function MusicPause() {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <defs>
         <linearGradient id="fillingColor">
-          <stop offset="5%" style={{ stopColor: "#4ad8ce" }} />
-          <stop offset="95%" style={{ stopColor: "#c939e6" }} />
+          <stop offset="5%" style={{ stopColor: "#5e17eb" }} />
+          <stop offset="95%" style={{ stopColor: "#cb6ce6" }} />
         </linearGradient>
       </defs>
       <path d="M5.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75A.75.75 0 007.25 3h-1.5zM12.75 3a.75.75 0 00-.75.75v12.5c0 .414.336.75.75.75h1.5a.75.75 0 00.75-.75V3.75a.75.75 0 00-.75-.75h-1.5z" />
@@ -124,8 +124,8 @@ function MusicStop() {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <defs>
         <linearGradient id="fillingColor">
-          <stop offset="5%" style={{ stopColor: "#4ad8ce" }} />
-          <stop offset="95%" style={{ stopColor: "#c939e6" }} />
+          <stop offset="5%" style={{ stopColor: "#5e17eb" }} />
+          <stop offset="95%" style={{ stopColor: "#cb6ce6" }} />
         </linearGradient>
       </defs>
       <path d="M5.25 3A2.25 2.25 0 003 5.25v9.5A2.25 2.25 0 005.25 17h9.5A2.25 2.25 0 0017 14.75v-9.5A2.25 2.25 0 0014.75 3h-9.5z" />
@@ -138,8 +138,8 @@ function MusicNextSong() {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <defs>
         <linearGradient id="fillingColor">
-          <stop offset="5%" style={{ stopColor: "#4ad8ce" }} />
-          <stop offset="95%" style={{ stopColor: "#c939e6" }} />
+          <stop offset="5%" style={{ stopColor: "#5e17eb" }} />
+          <stop offset="95%" style={{ stopColor: "#cb6ce6" }} />
         </linearGradient>
       </defs>
       <path d="M3.288 4.819A1.5 1.5 0 001 6.095v7.81a1.5 1.5 0 002.288 1.277l6.323-3.905c.155-.096.285-.213.389-.344v2.973a1.5 1.5 0 002.288 1.276l6.323-3.905a1.5 1.5 0 000-2.553L12.288 4.82A1.5 1.5 0 0010 6.095v2.973a1.506 1.506 0 00-.389-.344L3.288 4.82z" />
@@ -152,8 +152,8 @@ function MusicPrevSong() {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
       <defs>
         <linearGradient id="fillingColor">
-          <stop offset="5%" style={{ stopColor: "#4ad8ce" }} />
-          <stop offset="95%" style={{ stopColor: "#c939e6" }} />
+          <stop offset="5%" style={{ stopColor: "#5e17eb" }} />
+          <stop offset="95%" style={{ stopColor: "#cb6ce6" }} />
         </linearGradient>
       </defs>
       <path d="M7.712 4.819A1.5 1.5 0 0110 6.095v2.973c.104-.131.234-.248.389-.344l6.323-3.905A1.5 1.5 0 0119 6.095v7.81a1.5 1.5 0 01-2.288 1.277l-6.323-3.905a1.505 1.505 0 01-.389-.344v2.973a1.5 1.5 0 01-2.288 1.276l-6.323-3.905a1.5 1.5 0 010-2.553L7.712 4.82z" />

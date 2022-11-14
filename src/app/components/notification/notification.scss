@@ -1,0 +1,20 @@
+@import "../../variables";
+
+#notification {
+  position: fixed;
+  right: 5px;
+  bottom: 20px;
+  width: fit-content;
+  padding: 10px;
+  background-color: $second-color;
+  z-index: 10;
+  border: 2px solid $third-color;
+  animation: fadein 500ms linear;
+  border-radius: 20px;
+  animation: fadein 500ms linear, fadeout 500ms linear 3s forwards;
+
+  span {
+    font-family: $main-heading-font;
+    color: $third-color;
+  }
+}

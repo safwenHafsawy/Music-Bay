@@ -4,11 +4,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Copse&display=swap");
 
 //colors
-$first-color: #24225c;
-$second-color: #1d2996;
+$first-color: #292727;
+$second-color: #545454;
 $third-color: #ffffff;
-$fourth-color: #c939e6;
-$fifth-color: #4ad8ce;
+$fourth-color: #cb6ce6;
+$fifth-color: #5e17eb;
 $shadow-color: #ababab;
 
 //fonts
@@ -61,6 +61,18 @@ $home-page-zindex: 6;
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  99% {
+    opacity: 0.01;
+  }
+  100% {
+    opacity: 0;
   }
 }
 

@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./home.scss";
 import { BrandLogo, HomeSeparator } from "../illustrations/logosAndBg";
+import Notification from "../notification/notification";
 
 export default function HomePage() {
+  const [notif, setNotif] = useState(false);
+  const showNotif = () => {
+    setNotif(true);
+    setTimeout(() => setNotif(false), 5000);
+  };
+
   return (
     <div id="home-page">
       <div id="intro">
@@ -34,11 +41,12 @@ export default function HomePage() {
           <Link to="/categories">
             <button type="button">Start Listening now</button>
           </Link>
-          <Link to="/categories">
-            <button type="button">Connect To Spotify</button>
-          </Link>
+          <button type="button" onClick={showNotif}>
+            Connect To Spotify
+          </button>
         </div>
       </div>
+      {notif ? <Notification notification="This feautre is not available yet ! ごめん" /> : null}
     </div>
   );
 }

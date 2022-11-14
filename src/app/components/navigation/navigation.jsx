@@ -50,9 +50,6 @@ function NavigationBar(props) {
               <li>
                 <Link to="/categories">Connect to spotify</Link>
               </li>
-              <li>
-                <Link to="/about">About</Link>
-              </li>
             </ul>
           </div>
           <button
