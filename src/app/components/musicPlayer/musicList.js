@@ -25,7 +25,13 @@ const getMusicList = (genre) => {
     },
     Lofi: {},
     Rock: {},
-    Country: {},
+    Country: {
+      1: {
+        name: "Tennessee Whiskey",
+        owner: "Chris Stapleton",
+        link: `${MusicPublicUrl}music/${genre}/country1.mp3`,
+      },
+    },
   };
 
   const keys = Object.keys(MUSIC_LIST[genre]);

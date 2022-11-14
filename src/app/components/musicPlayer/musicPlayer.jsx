@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import propTypes from "prop-types";
 import Buffers from "./buffer.service";
 import NaviagtionWrapper from "../navigation/NaviagationWrapper";
+import Loading from "../loading/loading";
 import {
   MusicSeparator,
   MusicPlay,
@@ -116,8 +117,6 @@ class MusicPlayer extends Component {
   playAudio() {
     const { isLoadingMusic, elapsed, isShifting } = this.state;
     if (isLoadingMusic) {
-      // eslint-disable-next-line no-alert
-      alert("Audio still loading");
       return;
     }
     if (elapsed > 0) {
@@ -226,9 +225,12 @@ class MusicPlayer extends Component {
   }
 
   render() {
-    const { currentlyPlaying, volume, playedSongIndex, elapsed, source } = this.state;
+    const { currentlyPlaying, volume, playedSongIndex, elapsed, source, isLoadingMusic } = this.state;
     const { genre } = this.props;
-    return (
+
+    return isLoadingMusic ? (
+      <Loading />
+    ) : (
       <div id="musicplayer_full">
         <div id="music_list">
           <div id="heading">
