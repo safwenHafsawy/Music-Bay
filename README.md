@@ -1,2 +1,2 @@
 <h1>Music Bay</h1>
-<img src="https://imgur.com/YDezm63" alt="home page" title="home_page">
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/YDezm63" data-context="false" ><a href="//imgur.com/a/YDezm63">musicbay home page</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
