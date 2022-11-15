@@ -1,2 +1,2 @@
 <h1>Music Bay</h1>
-![image](https://imgur.com/YDezm63)
+<img src="https://imgur.com/YDezm63" alt="home page" title="home_page">
