@@ -1,4 +1,4 @@
-const MusicPublicUrl = process.env.PUBLICURL || "./public";
+const MusicPublicUrl = process.env.PUBLICURL || "./public/";
 
 const getMusicList = (genre) => {
   const result = [];
