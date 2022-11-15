@@ -9,10 +9,10 @@
 
 ***
 ### Music bay is a frontend project that allwos users to listen to songs online
-created with ReactJs, Wepabck and Babel
+##### created with ReactJs, Wepabck and Babel
 ---
 ## Installation : 
-### `npm start`
+### `npm install`
 run this command ,after cloning the repo to your local machine , to install dependencies
 
 ---
