@@ -20,7 +20,7 @@ const baseConfig = {
     main: path.resolve(__dirname, "src", "index.jsx"),
   },
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "build"),
     filename: "[name].bundle.[contenthash].js",
     clean: true,
   },
@@ -28,7 +28,7 @@ const baseConfig = {
     minimize: true,
     minimizer: [new CSSMinimizer(), new Terser()],
   },
-
+  devtool: "inline-source-map",
   plugins: [
     new HttpWebpackPlugin({
       template: path.resolve(__dirname, "public", "index.html"),
@@ -40,11 +40,11 @@ const baseConfig = {
       patterns: [
         {
           from: path.resolve(__dirname, "public", "imgs"),
-          to: path.resolve(__dirname, "dist", "public", "imgs"),
+          to: path.resolve(__dirname, "build", "public", "imgs"),
         },
         {
           from: path.resolve(__dirname, "public", "music"),
-          to: path.resolve(__dirname, "dist", "public", "music"),
+          to: path.resolve(__dirname, "build", "public", "music"),
         },
       ],
     }),
@@ -96,7 +96,7 @@ const prodConfig = {
       },
     ],
   },
-  plugins: [...baseConfig.plugins, new MiniCssExtractPlugin()],
+  plugins: [...baseConfig.plugins, new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" })],
   performance: {
     hints: false,
     maxEntrypointSize: 512000,
