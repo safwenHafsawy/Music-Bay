@@ -96,7 +96,10 @@ const prodConfig = {
       },
     ],
   },
-  plugins: [...baseConfig.plugins, new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" })],
+  plugins: [
+    ...baseConfig.plugins,
+    new MiniCssExtractPlugin({ filename: "[name].[contenthash].css", linkType: "text/css" }),
+  ],
   performance: {
     hints: false,
     maxEntrypointSize: 512000,
