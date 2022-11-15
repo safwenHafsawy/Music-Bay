@@ -5,6 +5,8 @@
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
 ![Screenshot_20221115_184916](https://user-images.githubusercontent.com/58145129/202000131-6824fb8b-b824-4360-bcb7-6ba81d2240da.png)
+![Screenshot_20221115_185107](https://user-images.githubusercontent.com/58145129/202006355-d8f5f3be-83bb-4aad-8f1d-e4e97afef9d4.png)
+
 ***
 ### Music bay is a frontend project that allwos users to listen to songs online
 created with ReactJs, Wepabck and Babel
@@ -22,7 +24,8 @@ Open [http://localhost:5050](http://localhost:3000) to view it in your browser.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `build` folder.
+
 It uses Webpack to bundle application code in production mode and optimizes the build for the best performance.
 
 ---
