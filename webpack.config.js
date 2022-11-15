@@ -34,6 +34,7 @@ const baseConfig = {
       template: path.resolve(__dirname, "public", "index.html"),
       filename: "index.html",
       title: "Music Bay",
+      favicon: "./public/imgs/favicon.ico",
     }),
 
     new CopyPlugin({
