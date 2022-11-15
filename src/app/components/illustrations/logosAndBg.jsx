@@ -186,10 +186,9 @@ function MusicPlayingLogo() {
       xmlSpace="preserve"
     >
       <defs>
-        <linearGradient id="fillingColorLogo">
-          <stop offset="5%" style={{ stopColor: "#4ad8ce" }} />
-          <stop offset="50%" style={{ stopColor: "#ffffff" }} />
-          <stop offset="95%" style={{ stopColor: "#c939e6" }} />
+        <linearGradient id="fillingColor">
+          <stop offset="5%" style={{ stopColor: "#5e17eb" }} />
+          <stop offset="95%" style={{ stopColor: "#cb6ce6" }} />
         </linearGradient>
       </defs>
       <g>
